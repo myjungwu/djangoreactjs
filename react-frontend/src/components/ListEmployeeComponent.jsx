@@ -6,13 +6,14 @@ class ListEmployeeComponent extends Component {
         super(props)
 
         this.state = {
+                //상태변수  
                 employees: []
         }
         this.addEmployee = this.addEmployee.bind(this);
         this.editEmployee = this.editEmployee.bind(this);
         this.deleteEmployee = this.deleteEmployee.bind(this);
     }
-
+    //Event Handler Method
     deleteEmployee(id){
         EmployeeService.deleteEmployee(id).then( res => {
             this.setState({employees: this.state.employees.filter(employee => employee.id !== id)});
@@ -25,8 +26,10 @@ class ListEmployeeComponent extends Component {
         this.props.history.push(`/add-employee/${id}`);
     }
 
+    //Life Cycle Method
     componentDidMount(){
-        EmployeeService.getEmployees().then((res) => {
+        EmployeeService.getEmployees()
+        .then((res) => {
             console.log(res.data);
             this.setState({ employees: res.data});
         }).catch(error => {

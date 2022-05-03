@@ -13,7 +13,7 @@ env PATH /usr/src/app/node_modules/.bin:$PATH
 # Copy package.json
 copy package.json /usr/src/app/package.json
 
-#COPY package.json /app/package.json
+# install dependency
 RUN npm install --silent && npm install react-scripts@3.4.1 -g --silent
 
 # add app

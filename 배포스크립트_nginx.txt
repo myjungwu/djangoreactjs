@@ -17,14 +17,13 @@ EOF
 
 
 docker run --name mysql-svc -d --net msanet --net-alias=mysql-svc \
--v /work/test3/db/conf:/conf.d/etc/mysql/conf.d \
+-v /work/test3/db/conf:/etc/mysql/conf.d \
 -e MYSQL_ROOT_PASSWORD='mysqlroot' \
 -e MYSQL_DATABASE='django_db' \
 -e MYSQL_USER='python' \
 -e MYSQL_PASSWORD='python' \
 -e MYSQL_ROOT_HOST='%' \
 mysql:5.7
-
 
 docker run --name mywas -d -p 8000:8000 --net msanet --net-alias=mywas vega2k/djangoreact:django
 

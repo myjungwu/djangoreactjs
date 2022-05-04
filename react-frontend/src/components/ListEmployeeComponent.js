@@ -21,21 +21,29 @@ class ListEmployeeComponent extends Component {
 
     //Life Cycle Method
     componentDidMount() {
-        EmployeeService.getEmployees()
+        EmployeeService.getEmployees() //Promise
             .then((res) => {
                 console.log(res.data);
                 this.setState({ employees: res.data });
             }).catch(error => {
-                console.log("Error Occurred ");
+                console.log("==> getEmployees Error Occurred ");
                 console.log(JSON.stringify(error));
             });
     }
 
     //Event Handler Method
     deleteEmployee = (id) => {
-        EmployeeService.deleteEmployee(id).then(res => {
+        EmployeeService.deleteEmployee(id)
+        .then(res => {
             this.setState({ employees: this.state.employees.filter(employee => employee.id !== id) });
-        });
+        })
+        .catch(error => {
+            console.log("==> deleteEmployee Error Occurred ");
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        })
+        ;
     }
     viewEmployee = (id) => {
         this.props.history.push(`/view-employee/${id}`);
@@ -43,9 +51,7 @@ class ListEmployeeComponent extends Component {
     editEmployee = (id) => {
         this.props.history.push(`/add-employee/${id}`);
     }
-
-
-    addEmployee() {
+    addEmployee =() => {
         this.props.history.push('/add-employee/_add');
     }
 

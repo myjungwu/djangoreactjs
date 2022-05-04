@@ -1,23 +1,12 @@
 import React, { Component } from 'react'
 import EmployeeService from '../services/EmployeeService'
-
+import Dialog from 'react-bootstrap-dialog';
 class ListEmployeeComponent extends Component {
     //state객체
     state = {
         //상태변수  
         employees: []
     }
-    // constructor(props) {
-    //     super(props)
-
-    //     this.state = {
-    //             //상태변수  
-    //             employees: []
-    //     }
-    //     this.addEmployee = this.addEmployee.bind(this);
-    //     this.editEmployee = this.editEmployee.bind(this);
-    //     this.deleteEmployee = this.deleteEmployee.bind(this);
-    // }
 
     //Life Cycle Method
     componentDidMount() {
@@ -33,39 +22,61 @@ class ListEmployeeComponent extends Component {
 
     //Event Handler Method
     deleteEmployee = (id) => {
-        EmployeeService.deleteEmployee(id)
-        .then(res => {
-            this.setState({ employees: this.state.employees.filter(employee => employee.id !== id) });
-        })
-        .catch(error => {
-            console.log("==> deleteEmployee Error Occurred ");
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        })
-        ;
-    }
+        this.dialog.show({
+            title: 'Employee Delete',
+            body: 'Are you sure you want to delete it?',
+            actions: [
+              Dialog.CancelAction(),
+              Dialog.OKAction(
+                () => {
+                    console.log('Remove action will be executed!')
+                    EmployeeService.deleteEmployee(id)
+                    .then( res => {
+                        this.setState({employees: this.state.employees.filter(employee => employee.id !== id)});
+                    })
+                    .catch(error => {
+                        console.log("==> deleteEmployee Error Occurred ");
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    });
+                }
+              )
+            ],
+            bsSize: 'small',
+            onHide: (dialog) => {
+              dialog.hide()
+              console.log('closed by clicking background.')
+            }
+          });
+    }//deleteEmployee
+
     viewEmployee = (id) => {
         this.props.history.push(`/view-employee/${id}`);
-    }
+    }//viewEmployee
+
     editEmployee = (id) => {
         this.props.history.push(`/add-employee/${id}`);
-    }
+    }//editEmployee
+
     addEmployee =() => {
         this.props.history.push('/add-employee/_add');
-    }
+    }//addEmployee
 
     render() {
+        const { addEmployee, editEmployee, deleteEmployee, viewEmployee } = this;
+        const { employees } = this.state;
+
         return (
             <div>
+                <Dialog ref={(el) => { this.dialog = el }} />
                 <h2 className="text-center">Employees List</h2>
                 <div className="row">
-                    <button className="btn btn-primary" onClick={this.addEmployee}> Add Employee</button>
+                    <button className="btn btn-primary" onClick={addEmployee}>Add Employee</button>
                 </div>
                 <br></br>
                 <div className="row">
                     <table className="table table-striped table-bordered">
-
                         <thead>
                             <tr>
                                 <th> Employee First Name</th>
@@ -76,16 +87,16 @@ class ListEmployeeComponent extends Component {
                         </thead>
                         <tbody>
                             {
-                                this.state.employees.map(
+                                employees.map(
                                     employee =>
                                         <tr key={employee.id}>
                                             <td> {employee.firstName} </td>
                                             <td> {employee.lastName}</td>
                                             <td> {employee.emailId}</td>
                                             <td>
-                                                <button onClick={() => this.editEmployee(employee.id)} className="btn btn-info">Update </button>
-                                                <button style={{ marginLeft: "10px" }} onClick={() => this.deleteEmployee(employee.id)} className="btn btn-danger">Delete </button>
-                                                <button style={{ marginLeft: "10px" }} onClick={() => this.viewEmployee(employee.id)} className="btn btn-info">View </button>
+                                                <button onClick={() => editEmployee(employee.id)} className="btn btn-info">Update </button>
+                                                <button style={{ marginLeft: "10px" }} onClick={() => deleteEmployee(employee.id)} className="btn btn-danger">Delete </button>
+                                                <button style={{ marginLeft: "10px" }} onClick={() => viewEmployee(employee.id)} className="btn btn-info">View </button>
                                             </td>
                                         </tr>
                                 )

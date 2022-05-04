@@ -44,14 +44,14 @@ services:
 
   mywas:
     image: vega2k/djangoreact:django
+    ports:
+      - "8000:8000"
     depends_on:
       - mysql-svc
     restart: always
 
   mynginx:
     image: vega2k/djangoreact:react
-    volumes:
-      - /work/test3/nginx/conf:/etc/nginx
     depends_on:
       - mywas  
     ports:

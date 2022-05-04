@@ -55,10 +55,12 @@ class ListEmployeeComponent extends Component {
         this.props.history.push(`/view-employee/${id}`);
     }//viewEmployee
 
+    //수정
     editEmployee = (id) => {
         this.props.history.push(`/add-employee/${id}`);
     }//editEmployee
-
+    
+    //등록
     addEmployee =() => {
         this.props.history.push('/add-employee/_add');
     }//addEmployee

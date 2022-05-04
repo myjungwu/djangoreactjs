@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import EmployeeService from '../services/EmployeeService';
+import Dialog from 'react-bootstrap-dialog';
 
 class CreateEmployeeComponent extends Component {
     //state객체
@@ -62,7 +63,11 @@ class CreateEmployeeComponent extends Component {
             })
             .catch(error => {
                 console.log("==> createEmployee Error Occurred ");
-                console.log(JSON.stringify(error));
+                //console.log(JSON.stringify(error));
+                console.log(error.response.status);
+                if(error.response.status === 400){
+                    this.dialog.showAlert('입력항목 확인하세요! '+ JSON.stringify(error.response.data));
+                }
             });
         }else{
             EmployeeService.updateEmployee(employee, this.state.id)
@@ -86,7 +91,7 @@ class CreateEmployeeComponent extends Component {
         this.props.history.push('/employees');
     }
 
-    getTitle(){
+    getTitle = () => {
         if(this.state.id === '_add'){
             return <h3 className="text-center">Add Employee</h3>
         }else{
@@ -99,6 +104,7 @@ class CreateEmployeeComponent extends Component {
 
         return (
             <div>
+                <Dialog ref={(el) => { this.dialog = el }} />
                 <br></br>
                    <div className = "container">
                         <div className = "row">

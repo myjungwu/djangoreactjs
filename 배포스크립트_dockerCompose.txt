@@ -51,7 +51,7 @@ services:
     restart: always
 
   mynginx:
-    image: vega2k/djangoreact:react_v1
+    image: vega2k/djangoreact:react_docker
     depends_on:
       - mywas  
     ports:

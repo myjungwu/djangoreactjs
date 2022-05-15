@@ -63,7 +63,7 @@ class CreateEmployeeComponent extends Component {
             })
             .catch(error => {
                 console.log("==> createEmployee Error Occurred ");
-                //console.log(JSON.stringify(error));
+                console.log(JSON.stringify(error));
                 console.log(error.response.status);
                 if(error.response.status === 400){
                     this.dialog.showAlert('입력항목 확인하세요! '+ JSON.stringify(error.response.data));
